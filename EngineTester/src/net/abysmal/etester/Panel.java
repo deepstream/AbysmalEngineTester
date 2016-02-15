@@ -2,7 +2,6 @@ package net.abysmal.etester;
 
 import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
@@ -28,7 +27,7 @@ public class Panel extends JPanel {
 	Vector3 start = new Vector3(25, 25);
 	Player p = new Player(start);
 	int r = 5;
-	Vector3[] hpt = {new Vector3(-r, -r), new Vector3(r, r)};
+	Vector3[] hpt = { new Vector3(-r, -r), new Vector3(r, r) };
 	int clock = 0;
 
 	public Panel() {
@@ -45,36 +44,12 @@ public class Panel extends JPanel {
 			drawCurve(new Vector3(25, 25), lc, rc, v);
 		}
 		if (!moving && Start.m.getClickInfo()[MouseEvent.BUTTON1][4] == 1) {
-			System.out.println("df");
 			lc.x = (float) this.getMousePosition().getX();
 			lc.y = (float) this.getMousePosition().getY();
 			drawCurve(new Vector3(25, 25), lc, rc, v);
 		}
-		if (Start.k.getCurrentlyPressedKeys()[KeyEvent.VK_W][0] == 1) {
-//			p.pos = start;
-//			p.pos.x = start.x;
-//			p.pos.y = start.y;
-			p.teleport(start);
-			moving = true;
-			bp = calcBezierPoints(start, lc, rc, v, bpLength);
-			count = 0;
-			System.out.println("Go!");
-			for(Vector3 v: bp){
-				System.out.println(v.x + ", " + v.y);
-			}
-		}
-//		if(moving){
-//			moving = !Movement.walkToBezier(bp, p);
-//		}
-//			Movement.walkToVector(new Vector3(300, 300), p);
-		if (moving) {
-			System.out.println(count+1);
-			boolean m = Movement.walkToVector(bp[count], p);
-			if (m) {
-				count++;
-				if (count >= bp.length) moving = false;
-			}
-		}
+
+		Movement.directionalMovement3(p);
 
 		g.drawImage(img, 0, 0, null);
 		g.setColor(new Color(0x00ff00));
@@ -82,10 +57,10 @@ public class Panel extends JPanel {
 		g.setColor(new Color(0x0000ff));
 		g.fillRect((int) p.getX() - r, (int) p.getY() - r, r * 2 + 1, r * 2 + 1);
 // System.out.println(p.getAcceleration());
-//		if (p.getX() < 0 || p.getX() >= this.getWidth() || p.getY() < 0 || p.getY() >= this.getHeight()) {
-//			p.setX(400);
-//			p.setY(200);
-//		}
+// if (p.getX() < 0 || p.getX() >= this.getWidth() || p.getY() < 0 || p.getY() >= this.getHeight()) {
+// p.setX(400);
+// p.setY(200);
+// }
 		clock++;
 		g.dispose();
 	}
@@ -112,9 +87,9 @@ public class Panel extends JPanel {
 		for (int i = 0; i < segmentCount; i++) {
 			t = i / (float) segmentCount;
 			Vector3 pixel = Math.calculateBezierPoint(t, p0, p1, p2, p3);
-			result[i] = new Vector3((int)pixel.x, (int)pixel.y);
+			result[i] = new Vector3((int) pixel.x, (int) pixel.y);
 		}
-		result[(int)segmentCount] = p3;
+		result[(int) segmentCount] = p3;
 		return result;
 	}
 
